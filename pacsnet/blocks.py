@@ -96,7 +96,7 @@ class Downsampler(nn.Module):
         self,
         input_shape: tuple,
         kernel_size: int = 3,
-        padding: 'str' = 'valid',
+        padding: str = 'valid',
     ):
         super().__init__()
         self.kernel_size = kernel_size
@@ -253,25 +253,3 @@ class LatentSpaceBuilder(nn.Module):
         x = x.flatten(1)
         x = self.mlp(x)
         return x
-
-
-x = torch.randn(1, 1, 256, 256, 256)
-downsampler = Downsampler(x.shape, padding='valid')
-upsampler = Upsampler(input_shape=(1, 128, 2, 2, 2))
-out = downsampler(x)
-seg = upsampler(out)
-# lsb = LatentSpaceBuilder((1, x.shape[2] // 2, 2, 2, 2))
-# latent = lsb(out[-1])
-
-# B, F = latent.shape
-
-# #params in lsb
-# print(sum(p.numel() for p in lsb.parameters()))
-
-# l1 = latent.clone().view(B, 1, F, 1, 1)
-# l2 = latent.clone().view(B, 1, 1, F, 1)
-# l3 = latent.clone().view(B, 1, 1, 1, F)
-
-# Obtain a volume of size (B, 1, F, F, F)
-# by multiplying the three latent vectors
-# volume = l1 * l2 * l3
